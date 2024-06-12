@@ -35,6 +35,8 @@ use crate::{
 
 use anchor_lang::prelude::{borsh, emit, event, AnchorDeserialize, AnchorSerialize};
 
+use std::convert::TryFrom;
+
 declare_check_assert_macros!(SourceFileId::State);
 
 pub trait ToAlignedBytes {
@@ -579,7 +581,9 @@ impl MarketState {
     }
 
     fn pubkey(&self) -> Pubkey {
-        Pubkey::new(cast_slice(&identity(self.own_address) as &[_]))
+        // Pubkey::new(cast_slice(&identity(self.own_address) as &[_]))
+        Pubkey::try_from(cast_slice(&identity(self.own_address) as &[_]))
+            .expect("own_address should be a pubkey")
     }
 }
 
@@ -3052,9 +3056,11 @@ impl State {
                         );
                     }
 
-                    let open_orders_pk = Pubkey::new(cast_slice(&identity(owner) as &[_]));
+                    let open_orders_pk = Pubkey::try_from(cast_slice(&identity(owner) as &[_]))
+                        .expect("open orders should be a pubkey");
                     let open_orders_owner_pk =
-                        Pubkey::new(cast_slice(&identity(open_orders.owner) as &[_]));
+                        Pubkey::try_from(cast_slice(&identity(open_orders.owner) as &[_]))
+                            .expect("opern orders owner should be a pubkey");
                     emit!(FillEventLog {
                         market: market.pubkey(),
                         bid: match side {
