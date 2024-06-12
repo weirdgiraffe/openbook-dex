@@ -211,7 +211,7 @@ pub struct MarketStateV2 {
     pub prune_authority: Pubkey,
     pub consume_events_authority: Pubkey,
     // Unused bytes for future upgrades.
-    padding: [u8; 992],
+    _padding: [u8; 992],
 }
 
 impl Deref for MarketStateV2 {
@@ -944,7 +944,7 @@ pub struct Request {
     owner_slot: u8,
     fee_tier: u8,
     self_trade_behavior: u8,
-    padding: [u8; 4],
+    _padding: [u8; 4],
     max_coin_qty_or_cancel_id: u64,
     native_pc_qty_locked: u64,
     order_id: u128,
@@ -1009,7 +1009,7 @@ impl Request {
                     owner_slot,
                     fee_tier: fee_tier.into(),
                     self_trade_behavior: self_trade_behavior.into(),
-                    padding: Zeroable::zeroed(),
+                    _padding: Zeroable::zeroed(),
                     order_id,
                     owner,
                     max_coin_qty_or_cancel_id: max_coin_qty.get(),
@@ -1038,7 +1038,7 @@ impl Request {
                     self_trade_behavior: 0,
                     owner: expected_owner,
                     native_pc_qty_locked: 0,
-                    padding: Zeroable::zeroed(),
+                    _padding: Zeroable::zeroed(),
                     client_order_id: client_order_id.map_or(0, NonZeroU64::get),
                 }
             }
@@ -1665,7 +1665,7 @@ pub(crate) mod account_parser {
                 unchecked_serum_dex_accounts,
                 unchecked_vaults,
                 unchecked_mints,
-                unchecked_rent,
+                _unchecked_rent,
                 remaining_accounts,
             ) = array_refs![accounts, 5, 2, 2, 1; .. ;];
 
@@ -1895,7 +1895,7 @@ pub(crate) mod account_parser {
                 ref coin_vault_acc,
                 ref pc_vault_acc,
                 ref spl_token_program_acc,
-                ref rent_sysvar_acc,
+                ref _rent_sysvar_acc,
             ]: &'a [AccountInfo<'b>; MIN_ACCOUNTS] = fixed_accounts;
             let srm_or_msrm_account = match fee_discount_account {
                 &[] => None,
@@ -2479,7 +2479,7 @@ pub(crate) mod account_parser {
                 ref open_orders_acc,
                 ref owner_acc,
                 ref market_acc,
-                ref rent_acc,
+                ref _rent_acc,
             ] = array_ref![accounts, 0, 4];
 
             let oo_authority = (&accounts[4..])
@@ -2799,7 +2799,7 @@ impl State {
     fn process_settle_funds(args: account_parser::SettleFundsArgs) -> DexResult {
         let account_parser::SettleFundsArgs {
             mut market,
-            mut open_orders,
+            open_orders,
             coin_vault,
             pc_vault,
             coin_wallet,
