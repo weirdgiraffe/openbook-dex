@@ -173,6 +173,7 @@ enum NodeRef<'a> {
     Leaf(&'a LeafNode),
 }
 
+#[allow(dead_code)]
 enum NodeRefMut<'a> {
     Inner(&'a mut InnerNode),
     Leaf(&'a mut LeafNode),
